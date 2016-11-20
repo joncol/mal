@@ -1,13 +1,13 @@
 
 ==================== FINAL INTERFACE ====================
-2016-11-20 21:25:21.592281 UTC
+2016-11-20 22:08:14.047396 UTC
 
 interface main@main:Main 8001
-  interface hash: e72fade471f6e63ed17f93f2dbd9d3c5
-  ABI hash: 0806711919ec536e65c7e05212dcea7d
-  export-list hash: 6a7259390db099d8424e8b44e46e8872
+  interface hash: f0364e462d00eeb0bea21843a22789b1
+  ABI hash: 6a17bb2b3deae32aaf5f62fc33833858
+  export-list hash: 0ce02b1f7da51e25449d613c15cefdd5
   orphan hash: 7fff09cc3bf472aa1062a1d13e1230c5
-  flag hash: d31346b9a048209f0e1162d993c2a715
+  flag hash: be1bb77512e61eada25e81fdac108090
   sig of: Nothing
   used TH splices: False
   where
@@ -20,7 +20,7 @@ package dependencies: array-0.5.1.1@array-0.5.1.1 base-4.9.0.0
                       deepseq-1.4.2.0@deepseq-1.4.2.0 directory-1.2.6.2@directory-1.2.6.2
                       filepath-1.4.1.0@filepath-1.4.1.0 ghc-prim-0.5.0.0
                       haskeline-0.7.2.3@haskeline-0.7.2.3 integer-gmp-1.0.0.1
-                      step0-0.1.0.0@step0-0.1.0.0-9V42r1AySSi5kROt9F3iMd
+                      step1-0.1.0.0@step1-0.1.0.0-oKA8tnYSHCLvlqYaPQcIG
                       terminfo-0.4.0.2@terminfo-0.4.0.2 time-1.6.0.1@time-1.6.0.1
                       transformers-0.5.2.0@transformers-0.5.2.0 unix-2.7.2.0@unix-2.7.2.0
 orphans: base-4.9.0.0:GHC.Base base-4.9.0.0:GHC.Float
@@ -43,11 +43,10 @@ family instance modules: base-4.9.0.0:Control.Applicative
                          containers-0.5.7.1@containers-0.5.7.1:Data.Set.Base
 import  -/  base-4.9.0.0:GHC.Base 8ed3be81c0707b322f975a84ae1bb816
 import  -/  base-4.9.0.0:Prelude b9bddb97799837fe67a8d00939a5b6c3
-import  -/  base-4.9.0.0:System.IO eb1d40aa793a4047069a5023f2ebcfe3
 import  -/  ghc-prim-0.5.0.0:GHC.Types 7378e41b7749213c8c88ceb6b0665d4c
 import  -/  haskeline-0.7.2.3@haskeline-0.7.2.3:System.Console.Haskeline 1ea4066c346c4241fb92e82475cad782
 import  -/  haskeline-0.7.2.3@haskeline-0.7.2.3:System.Console.Haskeline.InputT dc2cd3dd1ba5f7a1694a87cdfa31e1b3
-import  -/  step0-0.1.0.0@step0-0.1.0.0-9V42r1AySSi5kROt9F3iMd:Mal 3910233a20678ef5d3b38de0952aa61c
+import  -/  step1-0.1.0.0@step1-0.1.0.0-oKA8tnYSHCLvlqYaPQcIG:Mal 2003cb4e4aa20c41ac2a5d3af3ae7cde
 903911e077362e3abb55466502093993
   $sdefaultSettings ::
     System.Console.Haskeline.InputT.Settings GHC.Types.IO
