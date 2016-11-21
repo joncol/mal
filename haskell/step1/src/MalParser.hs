@@ -1,17 +1,19 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module MalParser where
 
-import           Control.Applicative (empty)
-import           Control.Monad (void)
-import           Text.Megaparsec
-import           Text.Megaparsec.Combinator
-import           Text.Megaparsec.Text
-import qualified Text.Megaparsec.Lexer as L
+import Text.Megaparsec
+-- import Text.Megaparsec.Combinator
+import Text.Megaparsec.String
 
-sc :: Parser ()
-sc = L.space (void spaceChar) (L.skipLineComment ";") empty
+import MalLexer
+import MalTypes
 
-lexeme :: Parser a -> Parser a
-lexeme = L.lexeme sc
+formParser :: Parser Form
+formParser = FList <$> listParser <|> FAtom <$> atomParser
 
-symbol :: String -> Parser String
-symbol = L.symbol sc
+listParser :: Parser List
+listParser = parens $ List <$> many formParser
+
+atomParser :: Parser Atom
+atomParser = Number <$> integer <|> Symbol <$> malSymbol

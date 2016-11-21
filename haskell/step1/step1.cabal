@@ -14,7 +14,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Mal MalTypes MalParser
+  exposed-modules:     Mal MalLexer MalParser MalTypes
   ghc-options:         -Wall
   build-depends:       base >= 4.7 && < 5
                      , haskeline
