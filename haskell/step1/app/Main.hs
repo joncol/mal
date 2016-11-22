@@ -11,6 +11,7 @@ main = runInputT defaultSettings loop
       minput <- getInputLine "user> "
       case minput of
         Nothing    -> return ()
+        Just ""    -> loop
         Just input -> do
           outputStrLn $ rep input
           loop

@@ -7,7 +7,7 @@ import           Text.Megaparsec.String
 import qualified Text.Megaparsec.Lexer as L
 
 sc :: Parser ()
-sc = L.space (void spaceChar) (L.skipLineComment ";") empty
+sc = L.space (void $ spaceChar <|> char ',') (L.skipLineComment ";") empty
 
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme sc

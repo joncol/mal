@@ -16,4 +16,25 @@ listParser :: Parser List
 listParser = parens $ List <$> many formParser
 
 atomParser :: Parser Atom
-atomParser = Number <$> integer <|> Symbol <$> malSymbol
+atomParser = NumberAtom <$> integer <|>
+             StringAtom <$> stringParser <|>
+             SymbolAtom <$> malSymbol
+
+stringCharParser :: Parser Char
+stringCharParser =
+  do
+    c <- anyChar
+    case c of
+      '\\' -> do
+        x <- anyChar
+        case x of
+          '\"' -> return '\"'
+          'n'  -> return '\n'
+          '\\' -> return '\\'
+          _    -> fail $ "Unexpected character " ++ [x]
+      _ -> return c
+
+stringParser :: Parser MalString
+stringParser = MalString <$> do
+  _ <- char '\"'
+  manyTill stringCharParser (char '\"')

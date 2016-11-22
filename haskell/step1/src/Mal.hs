@@ -1,15 +1,20 @@
 module Mal where
 
-import System.Console.Haskeline
+import Text.Megaparsec
+
+import MalLexer
+import MalParser
+import MalPrinter
+import MalTypes
 
 rep :: String -> String
-rep = myPrint . myEval . myRead
+rep = malPrint . myEval . myRead
 
-myRead :: String -> String
-myRead = id
+myRead :: String -> Form
+myRead s =
+  case runParser (sc >> formParser) "" s of
+    Left e  -> error $ "Parse error: " ++ parseErrorPretty e
+    Right r -> r
 
-myEval :: String -> String
+myEval :: Form -> Form
 myEval = id
-
-myPrint :: String -> String
-myPrint = id
