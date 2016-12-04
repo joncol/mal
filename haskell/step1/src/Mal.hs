@@ -7,14 +7,11 @@ import MalParser
 import MalPrinter
 import MalTypes
 
-rep :: String -> String
-rep = malPrint . myEval . myRead
+rep :: String -> Either (ParseError Char Dec) String
+rep s = (myEval . myRead) s >>= return . malPrint
 
-myRead :: String -> Form
-myRead s =
-  case runParser (sc >> formParser) "" s of
-    Left e  -> error $ "Parse error: " ++ parseErrorPretty e
-    Right r -> r
+myRead :: String -> Either (ParseError Char Dec) Form
+myRead s = runParser (sc >> formParser) "" s
 
-myEval :: Form -> Form
+myEval :: m Form -> m Form
 myEval = id
