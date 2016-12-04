@@ -35,6 +35,9 @@ atomTests = testGroup "Read and print tests"
 
   , testCase "String" $
       rep "\"abc def\"" @?= Right "\"abc def\""
+
+  , testCase "Keyword" $
+      rep ":abc" @?= Right ":abc"
   ]
 
 stringTests :: TestTree

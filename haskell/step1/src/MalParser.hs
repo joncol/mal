@@ -11,6 +11,7 @@ import MalTypes
 formParser :: Parser Form
 formParser = choice [ listParser
                     , vectorParser
+                    , keywordParser
                     , atomParser
                     , quoteParser
                     , quasiquoteParser
@@ -42,6 +43,14 @@ unquoteParser = FUnquote <$> (char '~' >> formParser)
 spliceUnquoteParser :: Parser Form
 spliceUnquoteParser = FSpliceUnquote <$> (string "~@" >> formParser)
 
+keywordParser :: Parser Form
+keywordParser = FKeyword <$> (char ':' >> malSymbol)
+
+stringParser :: Parser MalString
+stringParser = MalString <$> do
+  _ <- char '\"'
+  manyTill stringCharParser (char '\"')
+
 stringCharParser :: Parser Char
 stringCharParser =
   do
@@ -55,8 +64,3 @@ stringCharParser =
           '\\' -> return '\\'
           _    -> fail $ "Unexpected character " ++ [x]
       _ -> return c
-
-stringParser :: Parser MalString
-stringParser = MalString <$> do
-  _ <- char '\"'
-  manyTill stringCharParser (char '\"')

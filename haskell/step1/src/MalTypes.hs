@@ -11,6 +11,7 @@ data Form = FList List
           | FQuasiquote Form
           | FUnquote Form
           | FSpliceUnquote Form
+          | FKeyword String
           deriving (Eq, Show)
 
 newtype List = List [Form] deriving (Eq, Show)
@@ -30,6 +31,7 @@ instance Printable Form where
   malPrint (FQuasiquote q)    = "(quasiquote " ++ malPrint q ++ ")"
   malPrint (FUnquote q)       = "(unquote " ++ malPrint q ++ ")"
   malPrint (FSpliceUnquote q) = "(splice-unquote " ++ malPrint q ++ ")"
+  malPrint (FKeyword s)       = ":" ++ s
 
 instance Printable List where
   malPrint (List fs) = intercalate " " $ map malPrint fs
