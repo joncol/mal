@@ -68,7 +68,7 @@ stringCharParser =
       _ -> return c
 
 hashMapParser :: Parser Form
-hashMapParser = -- FHashMap <$> (HashMap . toPairList . braces <$> many formParser)
+hashMapParser =
   braces $
   do
     xs <- many (keyValueParser1 <|> keyValueParser2)
