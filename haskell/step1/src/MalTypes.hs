@@ -4,7 +4,14 @@ import Data.List (intercalate)
 
 import MalPrinter
 
-data Form = FList List | FAtom Atom deriving (Eq, Show)
+data Form = FList List
+          | FAtom Atom
+          | FQuote Form
+          | FQuasiquote Form
+          | FUnquote Form
+          | FSpliceUnquote Form
+          deriving (Eq, Show)
+
 newtype List = List [Form] deriving (Eq, Show)
 
 data Atom = NumberAtom Integer
@@ -15,8 +22,12 @@ data Atom = NumberAtom Integer
 newtype MalString = MalString String deriving (Eq, Show)
 
 instance Printable Form where
-  malPrint (FList l) = malPrint l
-  malPrint (FAtom a) = malPrint a
+  malPrint (FList l)  = malPrint l
+  malPrint (FAtom a)  = malPrint a
+  malPrint (FQuote q) = "(quote " ++ malPrint q ++ ")"
+  malPrint (FQuasiquote q) = "(quasiquote " ++ malPrint q ++ ")"
+  malPrint (FUnquote q) = "(unquote " ++ malPrint q ++ ")"
+  malPrint (FSpliceUnquote q) = "(splice-unquote " ++ malPrint q ++ ")"
 
 instance Printable List where
   malPrint (List fs) = "(" ++ (intercalate " " ss) ++ ")"

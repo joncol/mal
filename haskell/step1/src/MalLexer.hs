@@ -22,4 +22,4 @@ integer :: Parser Integer
 integer = lexeme L.integer
 
 malSymbol :: Parser String
-malSymbol = lexeme $ some (noneOf (") " :: [Char]))
+malSymbol = lexeme $ some (noneOf (") '`~" :: [Char]))

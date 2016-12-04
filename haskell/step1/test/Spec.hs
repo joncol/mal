@@ -7,7 +7,14 @@ main :: IO ()
 main = defaultMain unitTests
 
 unitTests :: TestTree
-unitTests = testGroup "Read and print tests" [atomTests, stringTests]
+unitTests = testGroup "Read and print tests"
+  [ atomTests
+  , stringTests
+  , quoteTests
+  , quasiquoteTests
+  , unquoteTests
+  , spliceUnquoteTests
+  ]
 
 atomTests :: TestTree
 atomTests = testGroup "Read and print tests"
@@ -37,4 +44,28 @@ stringTests = testGroup "Read and print tests"
 
   , testCase "Escaped double-quote" $
       rep "\"abc\\\"123\"" @?= Right "\"abc\\\"123\""
+  ]
+
+quoteTests :: TestTree
+quoteTests = testGroup "Quote tests"
+  [ testCase "Quoted number" $
+      rep "'1" @?= Right "(quote 1)"
+  ]
+
+quasiquoteTests :: TestTree
+quasiquoteTests = testGroup "Quasiquote tests"
+  [ testCase "Quasiquoted number" $
+      rep "`1" @?= Right "(quasiquote 1)"
+  ]
+
+unquoteTests :: TestTree
+unquoteTests = testGroup "Unquote tests"
+  [ testCase "Unquoted number" $
+      rep "~1" @?= Right "(unquote 1)"
+  ]
+
+spliceUnquoteTests :: TestTree
+spliceUnquoteTests = testGroup "Splice-unquote tests"
+  [ testCase "Splice-unquoted list" $
+      rep "~@(1 2 3)" @?= Right "(splice-unquote (1 2 3))"
   ]
