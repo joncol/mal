@@ -1,5 +1,8 @@
 .stack-work/
 haskell/step_*
+*.\#*
+\#*\#
+*~
 
 .bash_history
 .cache
