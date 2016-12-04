@@ -21,8 +21,11 @@ parens = between (symbol "(") (symbol ")")
 brackets :: Parser a -> Parser a
 brackets = between (symbol "[") (symbol "]")
 
+braces :: Parser a -> Parser a
+braces = between (symbol "{") (symbol "}")
+
 integer :: Parser Integer
 integer = lexeme L.integer
 
 malSymbol :: Parser String
-malSymbol = lexeme $ some (noneOf (")] '`~" :: [Char]))
+malSymbol = lexeme $ some (noneOf (")]} '`~" :: [Char]))

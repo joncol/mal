@@ -33,6 +33,13 @@ atomTests = testGroup "Read and print tests"
   , testCase "Vector" $
       rep "[123 456 789]" @?= Right "[123 456 789]"
 
+  , testCase "Hash-map with keyword keys" $
+      rep "{:a 123 :b 456 :c 789}" @?= Right "{:a 123 :b 456 :c 789}"
+
+  , testCase "Hash-map with string keys" $
+      rep "{\"a\" 123 \"b\" 456 \"c\" 789}" @?=
+      Right "{\"a\" 123 \"b\" 456 \"c\" 789}"
+
   , testCase "String" $
       rep "\"abc def\"" @?= Right "\"abc def\""
 

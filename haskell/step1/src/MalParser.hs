@@ -2,16 +2,18 @@
 
 module MalParser where
 
-import Text.Megaparsec
-import Text.Megaparsec.String
+import qualified Data.Map as M
+import           Text.Megaparsec
+import           Text.Megaparsec.String
 
-import MalLexer
-import MalTypes
+import           MalLexer
+import           MalTypes
 
 formParser :: Parser Form
 formParser = choice [ listParser
                     , vectorParser
-                    , keywordParser
+                    , hashMapParser
+                    , FKeyword <$> keywordParser
                     , atomParser
                     , quoteParser
                     , quasiquoteParser
@@ -43,13 +45,13 @@ unquoteParser = FUnquote <$> (char '~' >> formParser)
 spliceUnquoteParser :: Parser Form
 spliceUnquoteParser = FSpliceUnquote <$> (string "~@" >> formParser)
 
-keywordParser :: Parser Form
-keywordParser = FKeyword <$> (char ':' >> malSymbol)
+keywordParser :: Parser String
+keywordParser = char ':' >> malSymbol
 
 stringParser :: Parser MalString
 stringParser = MalString <$> do
   _ <- char '\"'
-  manyTill stringCharParser (char '\"')
+  manyTill stringCharParser (char '\"') <* space
 
 stringCharParser :: Parser Char
 stringCharParser =
@@ -64,3 +66,25 @@ stringCharParser =
           '\\' -> return '\\'
           _    -> fail $ "Unexpected character " ++ [x]
       _ -> return c
+
+hashMapParser :: Parser Form
+hashMapParser = -- FHashMap <$> (HashMap . toPairList . braces <$> many formParser)
+  braces $
+  do
+    xs <- many (keyValueParser1 <|> keyValueParser2)
+    let m = M.fromList xs
+    return $ FHashMap (HashMap m)
+
+keyValueParser1 :: Parser (Key, Form)
+keyValueParser1 =
+  do
+    key   <- stringParser
+    value <- formParser
+    return (StringKey key, value)
+
+keyValueParser2 :: Parser (Key, Form)
+keyValueParser2 =
+  do
+    key   <- keywordParser
+    value <- formParser
+    return (KeywordKey key, value)
