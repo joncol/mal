@@ -30,6 +30,9 @@ atomTests = testGroup "Read and print tests"
   , testCase "List" $
       rep "(123 456 789)" @?= Right "(123 456 789)"
 
+  , testCase "Vector" $
+      rep "[123 456 789]" @?= Right "[123 456 789]"
+
   , testCase "String" $
       rep "\"abc def\"" @?= Right "\"abc def\""
   ]

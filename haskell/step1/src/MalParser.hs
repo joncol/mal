@@ -9,20 +9,26 @@ import MalLexer
 import MalTypes
 
 formParser :: Parser Form
-formParser = FList <$> listParser
-         <|> FAtom <$> atomParser
-         <|> quoteParser
-         <|> quasiquoteParser
-         <|> spliceUnquoteParser
-         <|> unquoteParser
+formParser = choice [ listParser
+                    , vectorParser
+                    , atomParser
+                    , quoteParser
+                    , quasiquoteParser
+                    , spliceUnquoteParser
+                    , unquoteParser
+                    ]
 
-listParser :: Parser List
-listParser = (parens $ List <$> many formParser) <?> "list"
+listParser :: Parser Form
+listParser =  FList <$> (parens $ List <$> many formParser)
 
-atomParser :: Parser Atom
-atomParser = NumberAtom <$> integer <|>
-             StringAtom <$> stringParser <|>
-             SymbolAtom <$> malSymbol
+vectorParser :: Parser Form
+vectorParser =  FVector <$> (brackets $ List <$> many formParser)
+
+atomParser :: Parser Form
+atomParser = FAtom <$> choice [ NumberAtom <$> integer
+                              , StringAtom <$> stringParser
+                              , SymbolAtom <$> malSymbol
+                              ]
 
 quoteParser :: Parser Form
 quoteParser = FQuote <$> (char '\'' >> formParser)
