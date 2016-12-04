@@ -15,6 +15,8 @@ data Form = FList List
           | FUnquote Form
           | FSpliceUnquote Form
           | FKeyword String
+          | FMeta (List, HashMap)
+          | FDeref Atom
           deriving (Eq, Show)
 
 newtype List = List [Form] deriving (Eq, Show)
@@ -44,6 +46,9 @@ instance Printable Form where
   malPrint (FUnquote q)       = "(unquote " ++ malPrint q ++ ")"
   malPrint (FSpliceUnquote q) = "(splice-unquote " ++ malPrint q ++ ")"
   malPrint (FKeyword s)       = ":" ++ s
+  malPrint (FMeta (l, m))     = "(with-meta " ++ malPrint (FVector l) ++ " " ++
+                                malPrint (FHashMap m) ++ ")"
+  malPrint (FDeref r)         = "(deref " ++ malPrint r ++ ")"
 
 instance Printable List where
   malPrint (List fs) = intercalate " " $ map malPrint fs

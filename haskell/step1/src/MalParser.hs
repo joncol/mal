@@ -11,27 +11,29 @@ import           MalTypes
 
 formParser :: Parser Form
 formParser = choice [ listParser
-                    , vectorParser
-                    , hashMapParser
+                    , FVector <$> vectorParser
+                    , FHashMap <$> hashMapParser
                     , FKeyword <$> keywordParser
-                    , atomParser
+                    , FAtom <$> atomParser
                     , quoteParser
                     , quasiquoteParser
                     , spliceUnquoteParser
                     , unquoteParser
+                    , FMeta <$> metaDataParser
+                    , FDeref <$> derefParser
                     ]
 
 listParser :: Parser Form
 listParser =  FList <$> (parens $ List <$> many formParser)
 
-vectorParser :: Parser Form
-vectorParser =  FVector <$> (brackets $ List <$> many formParser)
+vectorParser :: Parser List
+vectorParser = brackets $ List <$> many formParser
 
-atomParser :: Parser Form
-atomParser = FAtom <$> choice [ NumberAtom <$> integer
-                              , StringAtom <$> stringParser
-                              , SymbolAtom <$> malSymbol
-                              ]
+atomParser :: Parser Atom
+atomParser = choice [ NumberAtom <$> integer
+                    , StringAtom <$> stringParser
+                    , SymbolAtom <$> malSymbol
+                    ]
 
 quoteParser :: Parser Form
 quoteParser = FQuote <$> (char '\'' >> formParser)
@@ -67,13 +69,13 @@ stringCharParser =
           _    -> fail $ "Unexpected character " ++ [x]
       _ -> return c
 
-hashMapParser :: Parser Form
+hashMapParser :: Parser HashMap
 hashMapParser =
   braces $
   do
     xs <- many (keyValueParser1 <|> keyValueParser2)
     let m = M.fromList xs
-    return $ FHashMap (HashMap m)
+    return $ HashMap m
 
 keyValueParser1 :: Parser (Key, Form)
 keyValueParser1 =
@@ -88,3 +90,13 @@ keyValueParser2 =
     key   <- keywordParser
     value <- formParser
     return (KeywordKey key, value)
+
+metaDataParser :: Parser (List, HashMap)
+metaDataParser = do
+  _ <- char '^'
+  m <- hashMapParser
+  l <- vectorParser
+  return (l, m)
+
+derefParser :: Parser Atom
+derefParser = char '@' >> atomParser

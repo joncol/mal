@@ -48,6 +48,12 @@ atomTests = testGroup "Read and print tests"
 
   , testCase "Comment" $
       rep "1 ; Comment" @?= Right "1"
+
+  , testCase "Meta-data" $
+      rep "^{\"a\" 1} [1 2 3]" @?= Right "(with-meta [1 2 3] {\"a\" 1})"
+
+  , testCase "Deref" $
+      rep "@a" @?= Right "(deref a)"
   ]
 
 stringTests :: TestTree
