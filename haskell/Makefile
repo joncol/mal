@@ -5,3 +5,7 @@ step0_repl:
 .PHONY: step1_read_print
 step1_read_print:
 	@./build.sh step1
+
+.PHONY: step2_eval
+step2_eval:
+	@./build.sh step2
